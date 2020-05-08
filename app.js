@@ -19,6 +19,9 @@ const db = mysql.createConnection({
 const publicDirectory = path.join(__dirname, './public');
 app.use(express.static(publicDirectory));
 
+app.use(express.urlencoded({ extended: false}));
+
+app.use(express.json());
 
 app.set('view engine', 'hbs');
 
@@ -30,15 +33,10 @@ db.connect( (error) => {
     }
 })
 
-app.get("/", (req, res) => {
-    res.render("index");
-});
-
-app.get("/register", (req, res) => {
-    res.render("register");
-});
+app.use('/', require('./routes/pages'));
+app.use('/auth', require('./routes/auth'));
 
 app.listen(5000, () => {
     console.log("Server started on Port 5000");
 });
-//hehe ok 
+
